@@ -1,0 +1,33 @@
+<?php
+
+namespace {{ namespace }};
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+/**
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ *
+ * @method \{{ namespace }}\{{ class }} make(array $attributes = [])
+ * @method \{{ namespace }}\{{ class }} create(array $attributes = [])
+ * @method \{{ namespace }}\{{ class }} forceCreate(array $attributes)
+ * @method \{{ namespace }}\{{ class }} firstOrNew(array $attributes = [], array $values = [])
+ * @method \{{ namespace }}\{{ class }} firstOrFail($columns = ['*'])
+ * @method \{{ namespace }}\{{ class }} firstOrCreate(array $attributes, array $values = [])
+ * @method \{{ namespace }}\{{ class }} firstOr($columns = ['*'], \Closure $callback = null)
+ * @method \{{ namespace }}\{{ class }} firstWhere($column, $operator = null, $value = null, $boolean = 'and')
+ * @method \{{ namespace }}\{{ class }} updateOrCreate(array $attributes, array $values = [])
+ * @method \{{ namespace }}\{{ class }} findOrFail($id, $columns = ['*'])
+ * @method \{{ namespace }}\{{ class }} findOrNew($id, $columns = ['*'])
+ * @method null|\{{ namespace }}\{{ class }} first($columns = ['*'])
+ * @method null|\{{ namespace }}\{{ class }} find($id, $columns = ['*'])
+ *
+ * @property string $uuid
+ *
+ * @property-read \Illuminate\Support\Carbon $created_at
+ * @property-read \Illuminate\Support\Carbon $updated_at
+ */
+class {{ class }} extends Model
+{
+    use HasFactory;
+}
