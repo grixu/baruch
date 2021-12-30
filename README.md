@@ -16,9 +16,46 @@ This project is build in domain-oriented conception presented in Laravel beyond 
 
 ## How to start
 
+You need to have installed [Docker](https://www.docker.com/get-started) or [Laravel Valet](https://laravel.com/docs/8.x/valet) if you are on Mac and would like to run dev environment natively instead of Docker.
+
 ```bash
 git clone https://github.com/grixu/baruch.git
+cd baruch
+composer install
 ```
+
+### The Docker way
+```bash
+cp .env.example.docker .env
+./vendor/bin/sail up -d
+./vendor/bin/sail shell
+# Then into the container's shell
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+yarn install
+yarn dev
+```
+
+Then, just open your browser at http://localhost and log in.
+
+### The Valet way
+```bash
+cp .env.example .env
+# Then prepare database 
+mysql -u root -p < "CREATE DATABASE baruch CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+yarn install 
+yarn dev
+valet link baruch
+```
+
+Now, you can just open your browser at http://baruch.test (or your custom TLD if you already set so).
+
+### Basic credentials
+
 
 ## Changelog
 
