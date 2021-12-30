@@ -48,7 +48,6 @@ import { Head, Link } from '@inertiajs/inertia-vue3';
 
 export default {
     layout: (h, page) => {
-        console.log(this)
         return h(GuestLayout, {}, {
             default: () => page,
             extra: () => h(Link, { href: '/register' }, () => 'Nie posiadasz konta? Zarejestruj się')
