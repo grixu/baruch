@@ -3,8 +3,8 @@
 namespace App\Auth\Controllers;
 
 use App\BaseController;
-use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Domain\Auth\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
