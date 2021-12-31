@@ -5,6 +5,8 @@ namespace Domain\Auth\Models;
 use Domain\Auth\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -53,6 +55,25 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function congregation(): BelongsTo
+    {
+        return $this->belongsTo(
+            Congregation::class,
+            'congregation_id',
+            'id'
+        );
+    }
+
+    public function groups(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Group::class,
+            'user_group',
+            'user_id',
+            'group_id'
+        )->using(UserGroup::class);
+    }
 
     public static function newFactory(): UserFactory
     {
