@@ -6,4 +6,7 @@ module.exports = {
             '@': path.resolve('resources/js'),
         },
     },
+    plugins: [
+      require('unplugin-icons/webpack')({ compiler: 'vue3' })
+    ]
 };
