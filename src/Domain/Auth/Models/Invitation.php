@@ -3,6 +3,7 @@
 namespace Domain\Auth\Models;
 
 use Domain\Auth\Factories\InvitationFactory;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -36,6 +37,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Invitation extends Model
 {
     use HasFactory;
+    use Uuid;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $fillable = [
         'name',

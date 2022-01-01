@@ -4,6 +4,7 @@ namespace Domain\Auth\Models;
 
 use Domain\Auth\Enums\GroupTypeEnum;
 use Domain\Auth\Factories\GroupFactory;
+use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -35,6 +36,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Group extends Model
 {
     use HasFactory;
+    use Uuid;
+
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     protected $casts = [
         'type' => GroupTypeEnum::class,

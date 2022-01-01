@@ -10,6 +10,8 @@ class CreateUserGroupTable extends Migration
     {
         Schema::create('user_group', function (Blueprint $table) {
             $table->id();
+            $table->uuid('user_id')->index();
+            $table->uuid('group_id')->index();
             $table->timestamps();
         });
     }
