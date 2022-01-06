@@ -5,6 +5,7 @@ namespace Domain\Auth\Models;
 use Domain\Auth\Factories\UserFactory;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -32,10 +33,14 @@ use Illuminate\Notifications\Notifiable;
  * @property string $name
  * @property string $email
  * @property string $password
+ * @property int $congregation_id
  *
  * @property-read \Illuminate\Support\Carbon $email_verified_at
  * @property-read \Illuminate\Support\Carbon $created_at
  * @property-read \Illuminate\Support\Carbon $updated_at
+ *
+ * @property Congregation $congregation
+ * @property Collection<Group> $groups
  */
 class User extends Authenticatable implements MustVerifyEmail
 {

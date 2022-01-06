@@ -5,6 +5,7 @@ namespace Domain\Auth\Models;
 use Domain\Auth\Enums\GroupTypeEnum;
 use Domain\Auth\Factories\GroupFactory;
 use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -32,6 +33,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property-read \Illuminate\Support\Carbon $created_at
  * @property-read \Illuminate\Support\Carbon $updated_at
+ * @property Collection<User> $users
  */
 class Group extends Model
 {

@@ -30,9 +30,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $email
  * @property int $congregation_id
  * @property int $group_id
+ * @property int $invited_by
  *
  * @property-read \Illuminate\Support\Carbon $created_at
  * @property-read \Illuminate\Support\Carbon $updated_at
+ * @property Congregation $congregation
+ * @property Group $group
+ * @property User $invitedBy
  */
 class Invitation extends Model
 {
@@ -47,6 +51,7 @@ class Invitation extends Model
         'email',
         'congregation_id',
         'group_id',
+        'invited_by',
     ];
 
     public function congregation(): BelongsTo
@@ -63,6 +68,15 @@ class Invitation extends Model
         return $this->belongsTo(
             Group::class,
             'group_id',
+            'id'
+        );
+    }
+
+    public function invitedBy(): BelongsTo
+    {
+        return $this->belongsTo(
+            User::class,
+            'invited_by',
             'id'
         );
     }
