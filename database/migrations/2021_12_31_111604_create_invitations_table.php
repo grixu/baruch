@@ -14,6 +14,7 @@ class CreateInvitationsTable extends Migration
             $table->string('name');
             $table->foreignId('congregation_id');
             $table->foreignId('group_id')->nullable();
+            $table->foreignId('invited_by');
             $table->timestamps();
         });
     }
