@@ -9,7 +9,6 @@
         "aws/aws-sdk-php": "^3.191",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
-        "goldspecdigital/laravel-eloquent-uuid": "^8.0",
         "guzzlehttp/guzzle": "^7.4",
         "inertiajs/inertia-laravel": "^0.4.3",
         "laravel-lang/lang": "~10.0",
