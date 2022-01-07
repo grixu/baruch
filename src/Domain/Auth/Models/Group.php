@@ -4,7 +4,6 @@ namespace Domain\Auth\Models;
 
 use Domain\Auth\Enums\GroupTypeEnum;
 use Domain\Auth\Factories\GroupFactory;
-use GoldSpecDigital\LaravelEloquentUUID\Database\Eloquent\Uuid;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,7 +28,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method null|\Domain\Auth\Models\Group first($columns = ['*'])
  * @method null|\Domain\Auth\Models\Group find($id, $columns = ['*'])
  *
- * @property string $id
+ * @property int $id
  * @property string $name
  * @property GroupTypeEnum $type
  * @property int $congregation_id
@@ -43,10 +42,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Group extends Model
 {
     use HasFactory;
-    use Uuid;
 
-    protected $keyType = 'string';
-    public $incrementing = false;
+    protected $guarded = ['id'];
 
     protected $casts = [
         'type' => GroupTypeEnum::class,
@@ -75,8 +72,8 @@ class Group extends Model
         return $this->belongsToMany(
             User::class,
             'user_group',
-            'group_id',
-            'user_id'
+            'user_id',
+            'group_id'
         )->using(UserGroup::class);
     }
 
