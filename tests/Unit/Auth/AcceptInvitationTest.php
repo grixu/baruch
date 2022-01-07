@@ -16,6 +16,7 @@ class AcceptInvitationTest extends TestCase
 {
     private Invitation $invitation;
     private User $user;
+    private AcceptInvitation $testObj;
 
     protected function setUp(): void
     {
@@ -25,11 +26,13 @@ class AcceptInvitationTest extends TestCase
             ->forInvitedBy()
             ->forCongregation()
             ->for(
-                Group::factory()->forCongregation()
+                Group::factory()->forCongregation()->hasUsers()
             )
             ->create();
 
         $this->user = User::factory()->create();
+
+        $this->testObj = app(AcceptInvitation::class);
 
         Notification::fake();
     }
@@ -37,9 +40,7 @@ class AcceptInvitationTest extends TestCase
     /** @test */
     public function it_add_user_to_selected_group_and_congregation()
     {
-        $testObj = new AcceptInvitation();
-
-        $testObj->execute($this->invitation, $this->user);
+        $this->testObj->execute($this->invitation, $this->user);
         $this->user->refresh();
 
         $this->assertEquals($this->invitation->congregation_id, $this->user->congregation_id);
@@ -55,9 +56,7 @@ class AcceptInvitationTest extends TestCase
     /** @test */
     public function it_sent_notification_to_invited_user()
     {
-        $testObj = new AcceptInvitation();
-
-        $testObj->execute($this->invitation, $this->user);
+        $this->testObj->execute($this->invitation, $this->user);
 
         Notification::assertSentTo($this->invitation->invitedBy, InvitationWasAccepted::class);
     }
@@ -65,9 +64,7 @@ class AcceptInvitationTest extends TestCase
     /** @test */
     public function it_sent_notification_to_invitation_issuer()
     {
-        $testObj = new AcceptInvitation();
-
-        $testObj->execute($this->invitation, $this->user);
+        $this->testObj->execute($this->invitation, $this->user);
 
         Notification::assertSentTo($this->user, YouAcceptInvitation::class);
 
@@ -76,9 +73,7 @@ class AcceptInvitationTest extends TestCase
     /** @test */
     public function it_sent_notification_to_group()
     {
-        $testObj = new AcceptInvitation();
-
-        $testObj->execute($this->invitation, $this->user);
+        $this->testObj->execute($this->invitation, $this->user);
 
         Notification::assertSentTo($this->invitation->group->users->all(), UserJoinedGroup::class);
     }
