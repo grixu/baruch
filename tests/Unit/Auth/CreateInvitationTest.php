@@ -3,7 +3,7 @@
 namespace Tests\Unit\Auth;
 
 use Domain\Auth\Actions\CreateInvitation;
-use Domain\Auth\Data\Invitation as InvitationData;
+use Domain\Auth\Data\InvitationData;
 use Domain\Auth\Models\Congregation;
 use Domain\Auth\Models\Group;
 use Domain\Auth\Models\User;
@@ -31,7 +31,6 @@ class CreateInvitationTest extends TestCase
             Group::factory()->forCongregation()->create()->id,
             $this->faker->name(),
             $this->faker->email(),
-            $this->user->id,
         );
 
         Notification::fake();
@@ -42,7 +41,7 @@ class CreateInvitationTest extends TestCase
     {
         $testObj = new CreateInvitation();
 
-        $returnedInvitation = $testObj->execute($this->data);
+        $returnedInvitation = $testObj->execute($this->data, $this->user);
 
         $this->assertDatabaseHas('invitations', ['id' => $returnedInvitation->id]);
     }
@@ -52,7 +51,7 @@ class CreateInvitationTest extends TestCase
     {
         $testObj = new CreateInvitation();
 
-        $testObj->execute($this->data);
+        $testObj->execute($this->data, $this->user);
 
         Notification::assertSentOnDemand(YouWereInvited::class, function($notificationObj) {
             return $this->data->email === $notificationObj->invitation->email;
@@ -64,7 +63,7 @@ class CreateInvitationTest extends TestCase
     {
         $testObj = new CreateInvitation();
 
-        $testObj->execute($this->data);
+        $testObj->execute($this->data, $this->user);
 
         Notification::assertSentTo($this->user, InvitationWasSend::class);
     }
