@@ -14,6 +14,11 @@ This project is build in domain-oriented conception presented in Laravel beyond 
 - Using `spatie/laravel-ray`
 - Using code quality tools such as: `php-cs-fixer`, `phpstan` & `php-insights`
 
+### Used libraries:
+- [laravel-data](https://spatie.be/docs/laravel-data/v1/introduction)
+- [inertia.js](https://inertiajs.com/)
+- [laravel-sluggable](https://github.com/spatie/laravel-sluggable)
+
 ## How to start
 
 You need to have installed [Docker](https://www.docker.com/get-started) or [Laravel Valet](https://laravel.com/docs/8.x/valet) if you are on Mac and would like to run dev environment natively instead of Docker.
@@ -55,7 +60,9 @@ valet link baruch
 Now, you can just open your browser at http://baruch.test (or your custom TLD if you already set so).
 
 ### Basic credentials
-
+The basic credentails automatically created by `php artisan db:seed` are:
+Email: `admin@admin.pl`
+Password: `admin`
 
 ## Changelog
 
