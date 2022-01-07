@@ -11,11 +11,15 @@ use Illuminate\Support\Facades\Notification;
 
 class AcceptInvitation
 {
+    public function __construct(private AddUserToGroup $addUserToGroup)
+    {
+    }
+
     public function execute(Invitation $invitation, User $user)
     {
-        $invitation->load('congregation', 'group', 'invitedBy');
+        $invitation->load('congregation', 'group', 'group.users', 'invitedBy');
         $user->congregation()->associate($invitation->congregation);
-        $user->groups()->syncWithoutDetaching([$invitation->group_id]);
+        $this->addUserToGroup->execute($user, $invitation->group);
         $user->push();
 
         Notification::send(
