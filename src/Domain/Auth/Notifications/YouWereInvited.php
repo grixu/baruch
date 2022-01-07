@@ -3,6 +3,7 @@
 namespace Domain\Auth\Notifications;
 
 use Domain\Auth\Models\Invitation;
+use Domain\Auth\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -12,7 +13,7 @@ class YouWereInvited extends Notification
 {
     use Queueable;
 
-    public function __construct(public Invitation $invitation)
+    public function __construct(public Invitation $invitation, public User $invitedBy)
     {
     }
 
