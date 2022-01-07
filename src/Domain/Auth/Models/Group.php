@@ -29,11 +29,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method null|\Domain\Auth\Models\Group first($columns = ['*'])
  * @method null|\Domain\Auth\Models\Group find($id, $columns = ['*'])
  *
- * @property string $uuid
+ * @property string $id
+ * @property string $name
+ * @property GroupTypeEnum $type
+ * @property int $congregation_id
  *
  * @property-read \Illuminate\Support\Carbon $created_at
  * @property-read \Illuminate\Support\Carbon $updated_at
+ * @property Congregation $congregation
  * @property Collection<User> $users
+ * @property Collection<Invitation> $invitations
  */
 class Group extends Model
 {
