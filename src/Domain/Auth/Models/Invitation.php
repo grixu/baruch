@@ -3,6 +3,8 @@
 namespace Domain\Auth\Models;
 
 use Domain\Auth\Factories\InvitationFactory;
+use Domain\Auth\QueryBuilders\InvitationQueryBuilder;
+use Dyrynda\Database\Support\GeneratesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -23,8 +25,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method \Domain\Auth\Models\Invitation findOrNew($id, $columns = ['*'])
  * @method null|\Domain\Auth\Models\Invitation first($columns = ['*'])
  * @method null|\Domain\Auth\Models\Invitation find($id, $columns = ['*'])
+ * @method static null|\Domain\Auth\Models\Invitation findByUuid(string $invitation)
  *
  * @property int $id
+ * @property string $uuid
  * @property string $name
  * @property string $email
  * @property int $congregation_id
@@ -40,6 +44,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Invitation extends Model
 {
     use HasFactory;
+    use GeneratesUuid;
 
     protected $fillable = [
         'name',
@@ -79,5 +84,10 @@ class Invitation extends Model
     public static function newFactory(): InvitationFactory
     {
         return InvitationFactory::new();
+    }
+
+    public function newEloquentBuilder($query): InvitationQueryBuilder
+    {
+        return new InvitationQueryBuilder($query);
     }
 }
