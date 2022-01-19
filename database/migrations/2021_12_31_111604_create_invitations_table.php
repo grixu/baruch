@@ -10,6 +10,7 @@ class CreateInvitationsTable extends Migration
     {
         Schema::create('invitations', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index();
             $table->string('email');
             $table->string('name');
             $table->foreignId('congregation_id');
