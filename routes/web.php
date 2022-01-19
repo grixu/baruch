@@ -25,6 +25,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('other');
 });
 
+Route::prefix('invitation')->name('invitation.')->group(function () {
+    Route::name('accept.')->group(function () {
+        Route::get('accept/{invitation:uuid}', [\App\Auth\Controllers\AcceptInvitationController::class, 'create'])
+            ->name('create');
 
+        Route::post('accept', [\App\Auth\Controllers\AcceptInvitationController::class, 'store'])
+            ->name('store');
+    });
+});
 
 require __DIR__.'/auth.php';
