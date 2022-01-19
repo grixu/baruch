@@ -33,8 +33,8 @@ use Illuminate\Notifications\Notifiable;
  * @property string $email
  * @property string $password
  * @property int $congregation_id
+ * @property \Illuminate\Support\Carbon $email_verified_at
  *
- * @property-read \Illuminate\Support\Carbon $email_verified_at
  * @property-read \Illuminate\Support\Carbon $created_at
  * @property-read \Illuminate\Support\Carbon $updated_at
  *
@@ -50,6 +50,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
+        'congregation_id',
     ];
 
     protected $hidden = [
