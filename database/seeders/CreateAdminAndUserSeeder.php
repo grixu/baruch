@@ -22,6 +22,8 @@ class CreateAdminAndUserSeeder extends Seeder
             );
             $admin->email_verified_at = now();
             $admin->save();
+
+            $admin->assignRole('super_admin');
         }
 
         if (app()->environment() === 'local') {
