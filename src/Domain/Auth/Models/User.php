@@ -10,9 +10,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @mixin \Illuminate\Database\Eloquent\Builder
+ * @mixin HasRoles
  *
  * @method \Domain\Auth\Models\User make(array $attributes = [])
  * @method \Domain\Auth\Models\User create(array $attributes = [])
@@ -45,6 +47,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory;
     use Notifiable;
+    use HasRoles;
 
     protected $fillable = [
         'name',
