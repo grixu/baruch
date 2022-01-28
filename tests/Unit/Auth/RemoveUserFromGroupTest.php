@@ -1,51 +1,34 @@
 <?php
 
-namespace Tests\Unit\Auth;
-
 use Domain\Auth\Actions\RemoveUserFromGroup;
 use Domain\Auth\Models\Group;
 use Domain\Auth\Models\User;
 use Domain\Auth\Notifications\UserLeaveGroup;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
 
-class RemoveUserFromGroupTest extends TestCase
-{
-    private User $user;
-    private Group $group;
-    private RemoveUserFromGroup $testObj;
+beforeEach(function () {
+    $this->group = Group::factory()
+        ->forCongregation()
+        ->hasUsers()
+        ->create();
+    $this->user = User::factory()->create();
+    $this->testObj = app(RemoveUserFromGroup::class);
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    $this->user->groups()->attach($this->group);
+    Notification::fake();
+});
 
-        $this->group = Group::factory()
-            ->forCongregation()
-            ->hasUsers()
-            ->create();
-        $this->user = User::factory()->create();
-        $this->testObj = app(RemoveUserFromGroup::class);
+it("removes_user_from_a_group", function () {
+    $this->assertNotEmpty($this->user->groups->toArray());
 
-        $this->user->groups()->attach($this->group);
-        Notification::fake();
-    }
+    $returnedUserObj = $this->testObj->execute($this->user, $this->group);
+    $returnedUserObj->refresh();
 
-    /** @test */
-    public function it_removes_user_from_a_group()
-    {
-        $this->assertNotEmpty($this->user->groups->toArray());
+    expect($returnedUserObj->groups->toArray())->toBeEmpty();
+});
 
-        $returnedUserObj = $this->testObj->execute($this->user, $this->group);
-        $returnedUserObj->refresh();
+it("notify_all_members_about_it", function () {
+    $this->testObj->execute($this->user, $this->group);
 
-        $this->assertEmpty($returnedUserObj->groups->toArray());
-    }
-
-    /** @test */
-    public function it_notify_all_members_about_it()
-    {
-        $this->testObj->execute($this->user, $this->group);
-
-        Notification::assertSentTo($this->group->users, UserLeaveGroup::class);
-    }
-}
+    Notification::assertSentTo($this->group->users, UserLeaveGroup::class);
+});

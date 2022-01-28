@@ -1,7 +1,5 @@
 <?php
 
-namespace Tests\Unit\Auth;
-
 use Domain\Auth\Actions\CreateInvitation;
 use Domain\Auth\Data\InvitationData;
 use Domain\Auth\Models\Congregation;
@@ -11,60 +9,45 @@ use Domain\Auth\Notifications\InvitationWasSend;
 use Domain\Auth\Notifications\YouWereInvited;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
 
-class CreateInvitationTest extends TestCase
-{
-    use WithFaker;
+uses(WithFaker::class);
 
-    private InvitationData $data;
-    private User $user;
+beforeEach(function () {
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    $this->user = User::factory()->create();
 
-        $this->user = User::factory()->create();
+    $this->data = new InvitationData(
+        Congregation::factory()->create()->id,
+        Group::factory()->forCongregation()->create()->id,
+        $this->faker->name(),
+        $this->faker->email(),
+    );
 
-        $this->data = new InvitationData(
-            Congregation::factory()->create()->id,
-            Group::factory()->forCongregation()->create()->id,
-            $this->faker->name(),
-            $this->faker->email(),
-        );
+    Notification::fake();
+});
 
-        Notification::fake();
-    }
+it("create_invitation_record", function () {
+    $testObj = new CreateInvitation();
 
-    /** @test */
-    public function it_create_invitation_record()
-    {
-        $testObj = new CreateInvitation();
+    $returnedInvitation = $testObj->execute($this->data, $this->user);
 
-        $returnedInvitation = $testObj->execute($this->data, $this->user);
+    $this->assertDatabaseHas('invitations', ['id' => $returnedInvitation->id]);
+});
 
-        $this->assertDatabaseHas('invitations', ['id' => $returnedInvitation->id]);
-    }
+it("send_notification_to_invited_person", function () {
+    $testObj = new CreateInvitation();
 
-    /** @test */
-    public function it_send_notification_to_invited_person()
-    {
-        $testObj = new CreateInvitation();
+    $testObj->execute($this->data, $this->user);
 
-        $testObj->execute($this->data, $this->user);
+    Notification::assertSentOnDemand(YouWereInvited::class, function ($notificationObj) {
+        return $this->data->email === $notificationObj->invitation->email;
+    });
+});
 
-        Notification::assertSentOnDemand(YouWereInvited::class, function($notificationObj) {
-            return $this->data->email === $notificationObj->invitation->email;
-        });
-    }
+it("send_notification_to_invitation_issuer", function () {
+    $testObj = new CreateInvitation();
 
-    /** @test */
-    public function it_send_notification_to_invitation_issuer()
-    {
-        $testObj = new CreateInvitation();
+    $testObj->execute($this->data, $this->user);
 
-        $testObj->execute($this->data, $this->user);
-
-        Notification::assertSentTo($this->user, InvitationWasSend::class);
-    }
-}
+    Notification::assertSentTo($this->user, InvitationWasSend::class);
+});
