@@ -7,6 +7,7 @@ use Domain\Auth\Notifications\InvitationWasAccepted;
 use Domain\Auth\Notifications\UserJoinedGroup;
 use Domain\Auth\Notifications\YouAcceptInvitation;
 use Illuminate\Support\Facades\Notification;
+use function Pest\Laravel\assertModelExists;
 
 beforeEach(function () {
     $this->invitation = Invitation::factory()
@@ -25,7 +26,7 @@ beforeEach(function () {
 it("creates_user", function () {
     $createdUser = $this->testObj->execute($this->invitation, 'password');
 
-    $this->assertModelExists($createdUser);
+    assertModelExists($createdUser);
     expect($createdUser->email_verified_at)->not()->toBeEmpty();
 });
 

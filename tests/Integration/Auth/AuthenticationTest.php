@@ -2,33 +2,36 @@
 
 use App\Providers\RouteServiceProvider;
 use Domain\Auth\Models\User;
+use function Pest\Laravel\assertAuthenticated;
+use function Pest\Laravel\assertGuest;
+use function Pest\Laravel\get;
+use function Pest\Laravel\post;
 
 it("login_screen_can_be_rendered", function () {
-    $response = $this->get('/login');
-
-    $response->assertStatus(200);
+    get('/login')
+        ->assertStatus(200);
 });
 
 it("users_can_authenticate_using_the_login_screen", function () {
     $user = User::factory()->create();
 
-    $response = $this->post('/login', [
+    $response = post('/login', [
         'email' => $user->email,
         'password' => 'password',
     ]);
 
-    $this->assertAuthenticated();
+    assertAuthenticated();
     $response->assertRedirect(RouteServiceProvider::HOME);
 });
 
 it("users_can_not_authenticate_with_invalid_password", function () {
     $user = User::factory()->create();
 
-    $this->post('/login', [
+    post('/login', [
         'email' => $user->email,
         'password' => 'wrong-password',
     ]);
 
-    $this->assertGuest();
+    assertGuest();
 });
 

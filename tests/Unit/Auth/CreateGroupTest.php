@@ -7,6 +7,7 @@ use Domain\Auth\Models\User;
 use Domain\Auth\Notifications\GroupWasCreated;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
+use function Pest\Laravel\assertModelExists;
 
 uses(WithFaker::class);
 
@@ -29,7 +30,7 @@ beforeEach(function () {
 it("creates_a_group", function () {
     $returnedGroupObj = $this->testObj->execute($this->groupData, $this->user->congregation_id);
 
-    $this->assertModelExists($returnedGroupObj);
+    assertModelExists($returnedGroupObj);
 });
 
 it("notify_all_members", function () {

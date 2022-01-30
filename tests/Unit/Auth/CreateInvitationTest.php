@@ -9,6 +9,7 @@ use Domain\Auth\Notifications\InvitationWasSend;
 use Domain\Auth\Notifications\YouWereInvited;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Notification;
+use function Pest\Laravel\assertDatabaseHas;
 
 uses(WithFaker::class);
 
@@ -31,7 +32,7 @@ it("create_invitation_record", function () {
 
     $returnedInvitation = $testObj->execute($this->data, $this->user);
 
-    $this->assertDatabaseHas('invitations', ['id' => $returnedInvitation->id]);
+    assertDatabaseHas('invitations', ['id' => $returnedInvitation->id]);
 });
 
 it("send_notification_to_invited_person", function () {

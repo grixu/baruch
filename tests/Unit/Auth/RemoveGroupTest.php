@@ -4,6 +4,7 @@ use Domain\Auth\Actions\RemoveGroup;
 use Domain\Auth\Models\Group;
 use Domain\Auth\Notifications\GroupWasDeleted;
 use Illuminate\Support\Facades\Notification;
+use function Pest\Laravel\assertModelMissing;
 
 beforeEach(function () {
     $this->group = Group::factory()
@@ -20,7 +21,7 @@ it("removes_group", function () {
     $users = $this->group->users;
     $this->testObj->execute($this->group);
 
-    $this->assertModelMissing($this->group);
+    assertModelMissing($this->group);
     expect($users)->each(fn ($user) => $user->groups->toBeEmpty());
 });
 
