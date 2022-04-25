@@ -1,47 +1,33 @@
 <?php
 
-namespace Tests\Unit\Auth;
-
 use Domain\Auth\Actions\RemoveGroup;
 use Domain\Auth\Models\Group;
 use Domain\Auth\Notifications\GroupWasDeleted;
 use Illuminate\Support\Facades\Notification;
-use Tests\TestCase;
+use function Pest\Laravel\assertModelMissing;
 
-class RemoveGroupTest extends TestCase
-{
-    private Group $group;
-    private RemoveGroup $testObj;
+beforeEach(function () {
+    $this->group = Group::factory()
+        ->forCongregation()
+        ->hasUsers()
+        ->create();
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+    $this->testObj = app(RemoveGroup::class);
 
-        $this->group = Group::factory()
-            ->forCongregation()
-            ->hasUsers()
-            ->create();
+    Notification::fake();
+});
 
-        $this->testObj = app(RemoveGroup::class);
+it("removes_group", function () {
+    $users = $this->group->users;
+    $this->testObj->execute($this->group);
 
-        Notification::fake();
-    }
+    assertModelMissing($this->group);
+    expect($users)->each(fn ($user) => $user->groups->toBeEmpty());
+});
 
-    /** @test */
-    public function it_removes_group()
-    {
-        $users = $this->group->users;
-        $this->testObj->execute($this->group);
+it("sent_notification_to_each_member", function () {
+    $this->testObj->execute($this->group);
 
-        $this->assertModelMissing($this->group);
-        $users->each(fn($user) => $this->assertEmpty($user->groups->toArray()));
-    }
+    Notification::assertSentTo($this->group->users, GroupWasDeleted::class);
+});
 
-    /** @test */
-    public function it_sent_notification_to_each_member()
-    {
-        $this->testObj->execute($this->group);
-
-        Notification::assertSentTo($this->group->users, GroupWasDeleted::class);
-    }
-}
